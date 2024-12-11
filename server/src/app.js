@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import adminMediaRoutes from "./routes/admin.media.routes.js";
+import adminCourseRoutes from "./routes/course.routes.js";
 
 const app = express();
 
@@ -34,5 +35,6 @@ app.use(cookieParser());
 // routes
 app.use("/auth", authRoutes);
 app.use("/admin-media", adminMediaRoutes);
+app.use("/admin-course", adminCourseRoutes);
 
 export { app };
