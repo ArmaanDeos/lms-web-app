@@ -76,12 +76,7 @@ const CourseCurriculum = () => {
 
   const isCourseCurriculumFormValid = () => {
     return courseCurriculumFormData.every((item) => {
-      return (
-        item &&
-        typeof item === "object" &&
-        item.title.trim() !== "" &&
-        item.videoUrl.trim() !== ""
-      );
+      return item.title.trim() !== "" && item.videoUrl.trim() !== "";
     });
   };
 
@@ -89,10 +84,25 @@ const CourseCurriculum = () => {
     const newFormData = [...courseCurriculumFormData];
     const getCurrentPublicId = newFormData[currentIndex].public_id;
 
-    const deleteCurrentMediaResponse = await cloudinaryDeleteServices(
-      getCurrentPublicId
-    );
-    console.log(deleteCurrentMediaResponse);
+    try {
+      const deleteCurrentMediaResponse = await cloudinaryDeleteServices(
+        getCurrentPublicId
+      );
+      if (deleteCurrentMediaResponse.success) {
+        newFormData[currentIndex] = {
+          ...newFormData[currentIndex],
+          videoUrl: "",
+          public_id: "",
+        };
+        setCourseCurriculumFormData(newFormData);
+        toast.success("Current video deleted successfully.Choose a new video.");
+      } else {
+        toast.error("Failed to delete the current video.");
+      }
+    } catch (error) {
+      console.error("Error while deleting video:", error);
+      toast.error("An error occurred while replacing the video.");
+    }
   };
 
   console.log(courseCurriculumFormData);
@@ -105,7 +115,7 @@ const CourseCurriculum = () => {
       <CardContent>
         <Button
           onClick={handleAddNewLecture}
-          disabled={!isCourseCurriculumFormValid || mediaUploadProgress}
+          disabled={!isCourseCurriculumFormValid() || mediaUploadProgress}
         >
           Add Lecture
         </Button>
