@@ -46,6 +46,16 @@ const App = () => {
           }
         />
         <Route
+          path="/admin/edit-course/:courseId"
+          element={
+            <AddNewCourse
+              authenticate={authInfo?.authenticate}
+              user={authInfo?.user}
+              element={<AdminDashboardPage />}
+            />
+          }
+        />
+        <Route
           path="/"
           element={
             <ProtectedRoutes

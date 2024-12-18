@@ -116,10 +116,101 @@ const cloudinaryDeleteServices = async (id) => {
   }
 };
 
+const fetchAdminCourseListServices = async () => {
+  try {
+    const { data } = await axiosInstance.get("/admin-course/get-all-courses");
+    return data;
+  } catch (error) {
+    console.log("Error in fetchAdminCourseListServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+const addNewCourseServices = async (formData) => {
+  try {
+    const { data } = await axiosInstance.post(
+      "/admin-course/add-new-course",
+      formData
+    );
+    return data;
+  } catch (error) {
+    console.log("Error in addNewCourseServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
+const fetchAdminCourseDetailsServices = async (id) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/admin-course/get-course-details/${id}`
+    );
+    return data;
+  } catch (error) {
+    console.log("Error in fetchAdminCourseDetailsServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
+const updateAdminCourseDetailsServices = async (id, formData) => {
+  try {
+    const { data } = await axiosInstance.put(
+      `/admin-course/update-course/${id}`,
+      formData
+    );
+    return data;
+  } catch (error) {
+    console.log("Error in updateAdminCourseDetailsServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
 export {
   registerServices,
   loginServices,
   checkAuthServices,
   cloudinaryUploadServices,
   cloudinaryDeleteServices,
+  fetchAdminCourseListServices,
+  addNewCourseServices,
+  fetchAdminCourseDetailsServices,
+  updateAdminCourseDetailsServices,
 };

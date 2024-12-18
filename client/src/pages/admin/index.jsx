@@ -2,14 +2,34 @@ import Courses from "@/components/admin-view/courses/Courses";
 import Dashboard from "@/components/admin-view/dashboard/Dashboard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { AdminContext } from "@/context/adminContext/AdminContext";
 import { AuthContext } from "@/context/authContext/AuthContext";
+import { fetchAdminCourseListServices } from "@/services";
 import { BarChart, Book, LogOut } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const AdminDashboardPage = () => {
   const { resetCredentials } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  const { adminCoursesList, setAdminCoursesList } = useContext(AdminContext);
+
+  const fetchAllAdminCourseList = async () => {
+    try {
+      const response = await fetchAdminCourseListServices();
+      if (response.success) {
+        toast.success(response.message);
+        setAdminCoursesList(response.data);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllAdminCourseList();
+  }, []);
 
   const menuItem = [
     {
@@ -22,7 +42,7 @@ const AdminDashboardPage = () => {
       icon: Book,
       label: "Courses",
       value: "courses",
-      component: <Courses />,
+      component: <Courses listOfCourses={adminCoursesList} />,
     },
     {
       icon: LogOut,

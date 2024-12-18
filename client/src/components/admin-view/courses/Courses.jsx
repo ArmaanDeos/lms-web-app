@@ -9,9 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DeleteIcon, Edit } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 
-const Courses = () => {
+const Courses = ({ listOfCourses }) => {
   const navigate = useNavigate();
 
   return (
@@ -37,21 +38,33 @@ const Courses = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  ReactJs Full Course
-                </TableCell>
-                <TableCell>100</TableCell>
-                <TableCell>$5000</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    <Edit className="h-6 w-6 cursor-pointer text-green-600" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <DeleteIcon className="h-6 w-6 cursor-pointer text-red-600" />
-                  </Button>
-                </TableCell>
-              </TableRow>
+              {listOfCourses &&
+                listOfCourses.length > 0 &&
+                listOfCourses.map((course) => (
+                  <TableRow key={course._id}>
+                    <TableCell className="font-medium">
+                      {course.title}
+                    </TableCell>
+                    <TableCell>
+                      {course.students && course.students.length}
+                    </TableCell>
+                    <TableCell>${course.pricing}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          navigate(`/admin/edit-course/${course?._id}`);
+                        }}
+                      >
+                        <Edit className="h-6 w-6 cursor-pointer text-green-600" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <DeleteIcon className="h-6 w-6 cursor-pointer text-red-600" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>

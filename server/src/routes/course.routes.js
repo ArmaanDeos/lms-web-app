@@ -11,6 +11,6 @@ const router = express.Router();
 router.post("/add-new-course", addNewCourse);
 router.get("/get-all-courses", getAllCourse);
 router.get("/get-course-details/:id", getCourseDetailsById);
-router.put("/updata-course/:id", updateCourseById);
+router.put("/update-course/:id", updateCourseById);
 
 export default router;
