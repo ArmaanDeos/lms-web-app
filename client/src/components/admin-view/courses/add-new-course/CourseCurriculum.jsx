@@ -189,6 +189,23 @@ const CourseCurriculum = () => {
     }
   };
 
+  const handleDeleteLecture = async (currentIndex) => {
+    let copyCourseCurriculumFormData = [...courseCurriculumFormData];
+    // console.log(copyCourseCurriculumFormData[currentIndex]);
+    const getCurrentSelectedVideoPublicId =
+      copyCourseCurriculumFormData[currentIndex].public_id;
+    const response = await cloudinaryDeleteServices(
+      getCurrentSelectedVideoPublicId
+    );
+    if (response?.success) {
+      copyCourseCurriculumFormData = copyCourseCurriculumFormData.filter(
+        (_, index) => index !== currentIndex
+      );
+      setCourseCurriculumFormData(copyCourseCurriculumFormData);
+    }
+    toast.success("Lecture deleted successfully.");
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -271,7 +288,12 @@ const CourseCurriculum = () => {
                     >
                       Replace Video
                     </Button>
-                    <Button className="bg-red-500">Delete Lecture</Button>
+                    <Button
+                      className="bg-red-500"
+                      onClick={() => handleDeleteLecture(index)}
+                    >
+                      Delete Lecture
+                    </Button>
                   </div>
                 ) : (
                   <Input
