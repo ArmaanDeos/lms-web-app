@@ -14,10 +14,12 @@ import {
 } from "@/config";
 
 import { AdminContext } from "@/context/adminContext/AdminContext";
+import { deleteAdminCourseServices } from "@/services";
 import { DeleteIcon, Edit } from "lucide-react";
 import { useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Courses = ({ listOfCourses }) => {
   const navigate = useNavigate();
@@ -26,7 +28,26 @@ const Courses = ({ listOfCourses }) => {
     setCurrentEditCourseId,
     setCourseLandingFormData,
     setCourseCurriculumFormData,
+    setListOfCourses,
   } = useContext(AdminContext);
+
+  const handleCourseDelete = async (courseId) => {
+    const confirmation = window.confirm(
+      "Are you sure you want to delete this course? This action cannot be undone."
+    );
+    if (confirmation) {
+      const success = await deleteAdminCourseServices(courseId);
+      if (success) {
+        toast.success("Course deleted successfully.");
+        setListOfCourses((prevCourses) =>
+          prevCourses.filter((course) => course._id !== courseId)
+        );
+        navigate(-1);
+      } else {
+        toast.error("Failed to delete course. Please try again.");
+      }
+    }
+  };
 
   return (
     <Card>
@@ -77,7 +98,11 @@ const Courses = ({ listOfCourses }) => {
                       >
                         <Edit className="h-6 w-6 cursor-pointer text-green-600" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleCourseDelete(course?._id)}
+                      >
                         <DeleteIcon className="h-6 w-6 cursor-pointer text-red-600" />
                       </Button>
                     </TableCell>
