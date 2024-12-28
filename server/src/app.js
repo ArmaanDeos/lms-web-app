@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import adminMediaRoutes from "./routes/admin.media.routes.js";
 import adminCourseRoutes from "./routes/course.routes.js";
+import studentRoutes from "./routes/student.routes.js";
 
 const app = express();
 
@@ -36,5 +37,6 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/admin-media", adminMediaRoutes);
 app.use("/admin-course", adminCourseRoutes);
+app.use("/student", studentRoutes);
 
 export { app };

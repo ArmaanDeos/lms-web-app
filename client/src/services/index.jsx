@@ -261,6 +261,49 @@ const deleteAdminCourseServices = async (id) => {
   }
 };
 
+// Student Services
+const fetchStudentCourseListServices = async () => {
+  try {
+    const { data } = await axiosInstance.get("/student/get-all-courses");
+    return data;
+  } catch (error) {
+    console.log("Error in fetchStudentCourseListServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
+const fetchStudentCourseDetailsServices = async (courseId) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/student/get-all-courses/details/${courseId}`
+    );
+    return data;
+  } catch (error) {
+    console.log("Error in fetchStudentCourseDetailsServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
 export {
   registerServices,
   loginServices,
@@ -273,4 +316,6 @@ export {
   fetchAdminCourseDetailsServices,
   updateAdminCourseDetailsServices,
   deleteAdminCourseServices,
+  fetchStudentCourseListServices,
+  fetchStudentCourseDetailsServices,
 };

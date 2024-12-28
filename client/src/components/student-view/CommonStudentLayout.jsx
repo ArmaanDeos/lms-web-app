@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
+import StudentHeader from "./StudentHeader";
 
 const CommonStudentLayout = () => {
   return (
     <div>
-      CommonStudentLayout
+      <StudentHeader />
       <Outlet />
     </div>
   );

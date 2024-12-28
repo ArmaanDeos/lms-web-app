@@ -8,6 +8,7 @@ import CommonStudentLayout from "./components/student-view/CommonStudentLayout";
 import StudentHomePage from "./pages/students/home";
 import PageNotFound from "./pages/page-not-found";
 import AddNewCourse from "./pages/admin/add-new-course";
+import StudentCoursesListPage from "./pages/students/courses";
 
 const App = () => {
   const { authInfo } = useContext(AuthContext);
@@ -66,6 +67,7 @@ const App = () => {
           }
         >
           <Route path="home" element={<StudentHomePage />} />
+          <Route path="courses" element={<StudentCoursesListPage />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
