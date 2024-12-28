@@ -83,7 +83,7 @@ const courseSchema = new Schema(
         },
       },
     ],
-    curriculum: [lectureSchema],
+    courseCurriculum: [lectureSchema],
     isPublished: {
       type: Boolean,
       default: false,

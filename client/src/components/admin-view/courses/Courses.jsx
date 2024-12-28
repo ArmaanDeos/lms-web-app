@@ -8,12 +8,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  courseCurriculumInitialFormData,
+  courseLandingInitialFormData,
+} from "@/config";
+
+import { AdminContext } from "@/context/adminContext/AdminContext";
 import { DeleteIcon, Edit } from "lucide-react";
+import { useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 const Courses = ({ listOfCourses }) => {
   const navigate = useNavigate();
+
+  const {
+    setCurrentEditCourseId,
+    setCourseLandingFormData,
+    setCourseCurriculumFormData,
+  } = useContext(AdminContext);
 
   return (
     <Card>
@@ -21,7 +34,12 @@ const Courses = ({ listOfCourses }) => {
         <CardTitle className="text-3xl font-extrabold">All Courses</CardTitle>
         <Button
           className="p-6"
-          onClick={() => navigate("/admin/add-new-course")}
+          onClick={() => {
+            setCurrentEditCourseId(null);
+            setCourseLandingFormData(courseLandingInitialFormData);
+            setCourseCurriculumFormData(courseCurriculumInitialFormData);
+            navigate("/admin/add-new-course");
+          }}
         >
           Create New Course
         </Button>

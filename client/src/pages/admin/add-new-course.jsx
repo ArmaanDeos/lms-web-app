@@ -13,10 +13,11 @@ import { AuthContext } from "@/context/authContext/AuthContext";
 import {
   addNewCourseServices,
   fetchAdminCourseDetailsServices,
+  updateAdminCourseDetailsServices,
 } from "@/services";
 
 import { useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const AddNewCourse = () => {
@@ -28,6 +29,8 @@ const AddNewCourse = () => {
     currentEditCourseId,
     setCurrentEditCourseId,
   } = useContext(AdminContext);
+
+  const navigate = useNavigate();
 
   const params = useParams();
   console.log("Params", params);
@@ -81,14 +84,30 @@ const AddNewCourse = () => {
         courseCurriculum: courseCurriculumFormData,
       };
 
-      console.log("CourseFinalFormData :", courseFormData);
-      const response = await addNewCourseServices(courseFormData);
+      console.log("Course Final Form Data:", courseFormData);
+      console.log("Current Edit Course ID:", currentEditCourseId);
+
+      const response = currentEditCourseId
+        ? await updateAdminCourseDetailsServices(
+            currentEditCourseId,
+            courseFormData
+          )
+        : await addNewCourseServices(courseFormData);
+
       if (response?.success) {
+        console.log("Course successfully saved.");
         setCourseLandingFormData(courseLandingInitialFormData);
         setCourseCurriculumFormData(courseCurriculumInitialFormData);
+        navigate(-1); // Navigate back to the previous page
+        setCurrentEditCourseId(null);
+      } else {
+        console.error(
+          "Error in saving course:",
+          response?.message || "Unknown error"
+        );
       }
     } catch (error) {
-      console.log(error);
+      console.error("Unexpected error in handleCreateCourse:", error);
     }
   };
 
@@ -106,7 +125,7 @@ const AddNewCourse = () => {
         }, {});
         console.log("setCourseFormData :", setCourseFormData);
         setCourseLandingFormData(setCourseFormData);
-        setCourseCurriculumFormData(response.data.curriculum);
+        setCourseCurriculumFormData(response?.data?.courseCurriculum);
       }
       console.log("Course Response :", response);
     } catch (error) {
@@ -125,7 +144,7 @@ const AddNewCourse = () => {
     if (params) {
       setCurrentEditCourseId(params?.courseId);
     }
-  }, [params]);
+  }, [params?.courseId]);
 
   return (
     <div className="container mx-auto p-4">

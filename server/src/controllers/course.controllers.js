@@ -13,12 +13,10 @@ const addNewCourse = async (req, res) => {
       });
     }
 
-    const savedCourse = await course.save();
-
     res.status(201).json({
       success: true,
       message: "Course added successfully",
-      data: savedCourse,
+      data: course,
     });
   } catch (error) {
     console.log(error);

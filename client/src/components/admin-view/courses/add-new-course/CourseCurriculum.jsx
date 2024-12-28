@@ -48,28 +48,39 @@ const CourseCurriculum = () => {
   const handleLectureUpload = async (event, currentIndex) => {
     const selectedFiles = event.target.files[0];
     if (selectedFiles) {
-      const newFormData = new FormData();
-      newFormData.append("file", selectedFiles);
+      const formData = new FormData();
+      formData.append("file", selectedFiles);
+
       try {
-        setMediaUploadProgress(true);
+        setMediaUploadProgress(true); // Indicate upload is in progress
         const response = await cloudinaryUploadServices(
-          newFormData,
+          formData,
           setUploadPercentage
         );
-        console.log(response);
+
         if (response.success) {
           toast.success("Lecture uploaded successfully!");
-          let newFormData = [...courseCurriculumFormData];
-          newFormData[currentIndex] = {
-            ...newFormData[currentIndex],
-            videoUrl: response?.data?.url,
-            public_id: response?.data?.public_id,
-          };
-          setCourseCurriculumFormData(newFormData);
+
+          // Update the specific lecture with the new video data
+          setCourseCurriculumFormData((prev) => {
+            const updatedData = [...prev];
+            updatedData[currentIndex] = {
+              ...updatedData[currentIndex],
+              videoUrl: response?.data?.url,
+              public_id: response?.data?.public_id,
+            };
+            return updatedData;
+          });
+
+          setMediaUploadProgress(false); // Reset progress indicator
+        } else {
+          toast.error("Failed to upload the video.");
           setMediaUploadProgress(false);
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error during video upload:", error);
+        toast.error("An error occurred during the video upload.");
+        setMediaUploadProgress(false); // Ensure progress indicator is reset on error
       }
     }
   };

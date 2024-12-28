@@ -160,6 +160,9 @@ const addNewCourseServices = async (formData) => {
 
 const fetchAdminCourseDetailsServices = async (id) => {
   try {
+    if (!id || typeof id !== "string") {
+      throw new Error("Invalid or missing course ID.");
+    }
     const { data } = await axiosInstance.get(
       `/admin-course/get-course-details/${id}`
     );
@@ -181,6 +184,7 @@ const fetchAdminCourseDetailsServices = async (id) => {
 };
 
 const updateAdminCourseDetailsServices = async (id, formData) => {
+  console.log("CourseId :", id);
   try {
     const { data } = await axiosInstance.put(
       `/admin-course/update-course/${id}`,

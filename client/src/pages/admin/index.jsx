@@ -18,9 +18,10 @@ const AdminDashboardPage = () => {
   const fetchAllAdminCourseList = async () => {
     try {
       const response = await fetchAdminCourseListServices();
+      console.log("Admin List", response);
       if (response.success) {
         toast.success(response.message);
-        setAdminCoursesList(response.data);
+        setAdminCoursesList(response?.data);
       }
     } catch (error) {
       toast.error(error.message);
