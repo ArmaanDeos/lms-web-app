@@ -96,6 +96,38 @@ const cloudinaryUploadServices = async (formData, onProgressCallback) => {
     }
   }
 };
+
+const cloudinaryBulkUploadServices = async (formData, onProgressCallback) => {
+  try {
+    const { data } = await axiosInstance.post(
+      "/admin-media/bulk-upload",
+      formData,
+      {
+        onUploadProgress: (ProgressEvent) => {
+          const percentCompleted = Math.round(
+            (ProgressEvent.loaded / ProgressEvent.total) * 100
+          );
+          onProgressCallback(percentCompleted);
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log("Error in cloudinayUploadServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
 const cloudinaryDeleteServices = async (id) => {
   try {
     const { data } = await axiosInstance.delete(`/admin-media/delete/${id}`);
@@ -212,6 +244,7 @@ export {
   loginServices,
   checkAuthServices,
   cloudinaryUploadServices,
+  cloudinaryBulkUploadServices,
   cloudinaryDeleteServices,
   fetchAdminCourseListServices,
   addNewCourseServices,

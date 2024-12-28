@@ -54,4 +54,28 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+// bulk upload feature
+
+router.post("/bulk-upload", upload.array("files", 10), async (req, res) => {
+  try {
+    const uploadPromises = req.files.map((file) =>
+      uploadMediaCloudinary(file.path)
+    );
+
+    const results = await Promise.all(uploadPromises);
+
+    res.status(200).json({
+      success: true,
+      message: "Files uploaded successfully",
+      data: results,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to upload multiple file",
+    });
+  }
+});
+
 export default router;
