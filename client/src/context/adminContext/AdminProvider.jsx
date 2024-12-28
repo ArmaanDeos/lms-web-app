@@ -21,6 +21,8 @@ export default function AdminProvider({ children }) {
 
   const [currentEditCourseId, setCurrentEditCourseId] = useState(null);
 
+  const [listOfCourses, setListOfCourses] = useState([]);
+
   return (
     <AdminContext.Provider
       value={{
@@ -36,6 +38,8 @@ export default function AdminProvider({ children }) {
         setAdminCoursesList,
         currentEditCourseId,
         setCurrentEditCourseId,
+        listOfCourses,
+        setListOfCourses,
       }}
     >
       {children}

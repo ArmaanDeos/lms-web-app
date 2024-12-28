@@ -239,6 +239,28 @@ const updateAdminCourseDetailsServices = async (id, formData) => {
   }
 };
 
+const deleteAdminCourseServices = async (id) => {
+  try {
+    const { data } = await axiosInstance.delete(
+      `/admin-course/delete-course/${id}`
+    );
+    return data;
+  } catch (error) {
+    console.log("Error in deleteAdminCourseServices:", error);
+
+    // Handle specific server errors
+    if (error.response && error.response.data) {
+      return error.response.data; // Return backend error response
+    } else {
+      // Handle generic or network errors
+      return {
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      };
+    }
+  }
+};
+
 export {
   registerServices,
   loginServices,
@@ -250,4 +272,5 @@ export {
   addNewCourseServices,
   fetchAdminCourseDetailsServices,
   updateAdminCourseDetailsServices,
+  deleteAdminCourseServices,
 };
