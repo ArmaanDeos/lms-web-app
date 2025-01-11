@@ -1,16 +1,20 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import App from "./App.jsx";
-import AuthProvider from "./context/authContext/AuthProvider";
-import AdminProvider from "./context/adminContext/AdminProvider";
-import StudentProvider from "./context/studentContext/StudentProvider";
+import "./index.css";
+import { BrowserRouter } from "react-router-dom";
+import AuthProvider from "./context/auth-context/index.jsx";
+import InstructorProvider from "./context/instructor-context/index.jsx";
+import StudentProvider from "./context/student-context/index.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <AdminProvider>
-      <StudentProvider>
-        <App />
-      </StudentProvider>
-    </AdminProvider>
-  </AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <InstructorProvider>
+        <StudentProvider>
+          <App />
+        </StudentProvider>
+      </InstructorProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const MediaProgressBar = ({ isMediaUploading, progress }) => {
+function MediaProgressbar({ isMediaUploading, progress }) {
   const [showProgress, setShowProgress] = useState(false);
   const [animatedProgress, setAnimatedProgress] = useState(0);
 
@@ -13,17 +13,17 @@ const MediaProgressBar = ({ isMediaUploading, progress }) => {
       const timer = setTimeout(() => {
         setShowProgress(false);
       }, 1000);
+
       return () => clearTimeout(timer);
     }
   }, [isMediaUploading, progress]);
 
-  if (!showProgress) {
-    return null;
-  }
+  if (!showProgress) return null;
+
   return (
-    <div className="w-full bg-gray-200 rounded-full h-3 mb-5 mt-5 relative overflow-hidden">
+    <div className="w-full bg-gray-200 rounded-full h-3 mt-5 mb-5 relative overflow-hidden">
       <motion.div
-        className="bg-blue-700 h-3 rounded-full"
+        className="bg-blue-600 h-3 rounded-full"
         initial={{ width: 0 }}
         animate={{
           width: `${animatedProgress}%`,
@@ -32,14 +32,20 @@ const MediaProgressBar = ({ isMediaUploading, progress }) => {
       >
         {progress >= 100 && isMediaUploading && (
           <motion.div
-            className="absolute top-0 left-0 bottom-0 bg-blue-400 opacity-50"
-            animate={{ x: ["0%", "100%", "0%"] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            className="absolute top-0 left-0 right-0 bottom-0 bg-blue-400 opacity-50"
+            animate={{
+              x: ["0%", "100%", "0%"],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+            }}
           />
         )}
       </motion.div>
     </div>
   );
-};
+}
 
-export default MediaProgressBar;
+export default MediaProgressbar;
