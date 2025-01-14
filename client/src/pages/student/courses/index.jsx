@@ -39,6 +39,7 @@ function StudentViewCoursesPage() {
   const [sort, setSort] = useState("price-lowtohigh");
   const [filters, setFilters] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
+
   const {
     studentViewCoursesList,
     setStudentViewCoursesList,
@@ -88,16 +89,32 @@ function StudentViewCoursesPage() {
   }
 
   async function handleCourseNavigate(getCurrentCourseId) {
-    const response = await checkCoursePurchaseInfoService(
-      getCurrentCourseId,
-      auth?.user?._id
-    );
+    try {
+      const response = await checkCoursePurchaseInfoService(
+        getCurrentCourseId,
+        auth?.user?._id
+      );
 
-    if (response?.success) {
-      if (response?.data) {
-        navigate(`/course-progress/${getCurrentCourseId}`);
+      if (response?.success) {
+        if (response?.data) {
+          navigate(`/course-progress/${getCurrentCourseId}`);
+        } else {
+          navigate(`/course/details/${getCurrentCourseId}`);
+        }
       } else {
+        // Handle the case where the response is not successful
+        console.error(
+          "Error fetching course purchase info:",
+          response?.message
+        );
+      }
+    } catch (error) {
+      // If there's an error (e.g., 404), handle it here
+      if (error?.response?.status === 404) {
+        console.log("Course not found, redirecting to details page.");
         navigate(`/course/details/${getCurrentCourseId}`);
+      } else {
+        console.error("Error in handleCourseNavigate:", error);
       }
     }
   }
@@ -131,12 +148,15 @@ function StudentViewCoursesPage() {
       <div className="flex flex-col md:flex-row gap-4">
         <aside className="w-full md:w-64 space-y-4">
           <div>
-            {Object.keys(filterOptions).map((ketItem) => (
-              <div className="p-4 border-b">
+            {Object.keys(filterOptions).map((ketItem, index) => (
+              <div className="p-4 border-b" key={index}>
                 <h3 className="font-bold mb-3">{ketItem.toUpperCase()}</h3>
                 <div className="grid gap-2 mt-2">
-                  {filterOptions[ketItem].map((option) => (
-                    <Label className="flex font-medium items-center gap-3">
+                  {filterOptions[ketItem].map((option, index) => (
+                    <Label
+                      className="flex font-medium items-center gap-3"
+                      key={index}
+                    >
                       <Checkbox
                         checked={
                           filters &&

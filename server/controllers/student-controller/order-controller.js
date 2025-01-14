@@ -29,8 +29,8 @@ const createOrder = async (req, res) => {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: `${process.env.CLIENT_URL}/payment-return`,
-        cancel_url: `${process.env.CLIENT_URL}/payment-cancel`,
+        return_url: `${process.env.CORS_ORIGIN}/payment-return`,
+        cancel_url: `${process.env.CORS_ORIGIN}/payment-cancel`,
       },
       transactions: [
         {

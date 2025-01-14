@@ -60,11 +60,15 @@ function StudentViewCourseDetailsPage() {
       currentCourseDetailsId
     );
 
+    console.log("Response", response);
+
     if (response?.success) {
       setStudentViewCourseDetails(response?.data);
+
       setLoadingState(false);
     } else {
       setStudentViewCourseDetails(null);
+
       setLoadingState(false);
     }
   }
@@ -119,9 +123,7 @@ function StudentViewCourseDetailsPage() {
 
   useEffect(() => {
     if (!location.pathname.includes("course/details"))
-      setStudentViewCourseDetails(null),
-        setCurrentCourseDetailsId(null),
-        setCoursePurchaseId(null);
+      setStudentViewCourseDetails(null), setCurrentCourseDetailsId(null);
   }, [location.pathname]);
 
   if (loadingState) return <Skeleton />;
@@ -192,6 +194,7 @@ function StudentViewCourseDetailsPage() {
               {studentViewCourseDetails?.curriculum?.map(
                 (curriculumItem, index) => (
                   <li
+                    key={index}
                     className={`${
                       curriculumItem?.freePreview
                         ? "cursor-pointer"
@@ -264,8 +267,9 @@ function StudentViewCourseDetailsPage() {
           <div className="flex flex-col gap-2">
             {studentViewCourseDetails?.curriculum
               ?.filter((item) => item.freePreview)
-              .map((filteredItem) => (
+              .map((filteredItem, index) => (
                 <p
+                  key={index}
                   onClick={() => handleSetFreePreview(filteredItem)}
                   className="cursor-pointer text-[16px] font-medium"
                 >

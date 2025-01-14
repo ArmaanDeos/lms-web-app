@@ -34,16 +34,38 @@ function StudentHomePage() {
   }
 
   async function handleCourseNavigate(getCurrentCourseId) {
-    const response = await checkCoursePurchaseInfoService(
-      getCurrentCourseId,
-      auth?.user?._id
-    );
+    try {
+      console.log("Course ID:", getCurrentCourseId);
+      console.log("User ID:", auth?.user?._id);
 
-    if (response?.success) {
-      if (response?.data) {
-        navigate(`/course-progress/${getCurrentCourseId}`);
+      if (!getCurrentCourseId || !auth?.user?._id) {
+        console.error("Missing course ID or user ID");
+        return;
+      }
+
+      const response = await checkCoursePurchaseInfoService(
+        getCurrentCourseId,
+        auth?.user?._id
+      );
+
+      console.log("Purchase Info Response:", response);
+
+      if (response?.success) {
+        if (response?.data) {
+          navigate(`/course-progress/${getCurrentCourseId}`);
+        } else {
+          navigate(`/course/details/${getCurrentCourseId}`);
+        }
       } else {
+        console.error("Error fetching purchase info:", response?.message);
         navigate(`/course/details/${getCurrentCourseId}`);
+      }
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        console.log("Course not found, redirecting to details page.");
+        navigate(`/course/details/${getCurrentCourseId}`);
+      } else {
+        console.error("Error in handleCourseNavigate:", error);
       }
     }
   }
@@ -86,13 +108,14 @@ function StudentHomePage() {
         </div>
       </section>
       <section className="py-12 px-4 lg:px-8">
-        <h2 className="text-2xl font-bold mb-6">Featured COourses</h2>
+        <h2 className="text-2xl font-bold mb-6">Featured Courses</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
             studentViewCoursesList.map((courseItem) => (
               <div
                 onClick={() => handleCourseNavigate(courseItem?._id)}
                 className="border rounded-lg overflow-hidden shadow cursor-pointer"
+                key={courseItem?._id}
               >
                 <img
                   src={courseItem?.image}
